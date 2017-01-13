@@ -3,11 +3,11 @@
 <div ng-controller="NoteController as noteCtrl" class="notes">
 	<div class="note-list">
 		<div ng-repeat="note in noteCtrl.notes" class="saved-note">
-			<div class="title" ng-class="{'draft': note.status == 'draft'}">
+			<div class="title" ng-class="{'draft': note.status == 'draft', 'inactive': note.status == 'inactive'}">
 				{{note.title}} <span>{{note.visualizations}} views</span>
 			</div>
 			<br/>
-			<div class="content" ng-class="{'draft': note.status == 'draft'}">{{note.content.substring(0, 125)}}...</div>
+			<div class="content" ng-class="{'draft': note.status == 'draft', 'inactive': note.status == 'inactive'}">{{note.content.substring(0, 125)}}...</div>
 			<div class="operations">
 				<button ng-click="noteCtrl.seeNote(note)">
 					<i class="fa fa-eye" aria-hidden="true"></i>

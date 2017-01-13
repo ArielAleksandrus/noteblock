@@ -28,6 +28,9 @@
 			.draft {
 				color: #777;
 			}
+			.inactive {
+				color: #aaa;
+			}
 			.operations {
 				display: block;
 				button {
@@ -59,24 +62,39 @@
 	&.show{
 		font-family: sans-serif;
 		padding: 2em 0 0 4em;
+		width: 50%;
+		max-width: 30em;
+		margin: auto;
 		.title {
 			font-size: 200%;
 			padding-bottom: 1em;
-
 			span {
-				font-size: 100%;
+				font-size: 70%;
 				padding-left: 2em;
 				font-style: italic;
 				color: #777;
 			}
 		}
+		.first-vis {
+			font-size: 80%;
+		}
 		.content {
+			border: 1px solid black;
 			font-size: 110%;
-			padding-bottom: 1em;
+			margin: 1em 0;
+			padding: 0 1em;
 		}
 		.operations {
 			button {
 				font-size: 110%;
+			}
+		}
+		.nav {
+			margin-top: 1em;
+			text-align: center;
+			button{
+				font-size: 110%;
+				padding: 0.5em 1em;
 			}
 		}
 	}
