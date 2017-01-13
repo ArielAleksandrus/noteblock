@@ -1,7 +1,10 @@
 class User
   include Mongoid::Document
   include Mongoid::Timestamps
-  extend Enumerize
+  include Mongoid::Elasticsearch
+
+  elasticsearch!
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -36,18 +39,5 @@ class User
   # field :unlock_token,    type: String # Only if unlock strategy is :email or :both
   # field :locked_at,       type: Time
 
-  field :username, type: String
-  validates_uniqueness_of :username
-  validates_format_of :username, with: /\A[a-z|0-9|\-|_]+/i
-
-  field :role, type: String
-  enumerize :role, in: [:member, :uploader, :admin], default: :member
-
-  def login=(login)
-    @login = login
-  end
-  def login
-    @login || self.username || self.email
-  end
-
+  has_many :notes, class_name: "Note"
 end

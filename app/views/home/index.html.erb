@@ -1,1 +1,34 @@
-<%= link_to('Sair', destroy_user_session_path, method: :delete) %>
+<div ng-controller="HomeController as homeCtrl">
+	<%= link_to('Logout', destroy_user_session_path) %>
+	<br/><br/>
+	<button ng-click="homeCtrl.goToNotesPath()">My Notes</button>
+	<br/><br/>
+	<input type="text" ng-model="homeCtrl.my_notes" placeholder="search my notes"/><button ng-click="homeCtrl.searchMyNotes()"><i class="fa fa-search" aria-hidden="true"></i></button>
+	<br/><br/>
+	<input type="text" ng-model="homeCtrl.all_notes" placeholder="search all notes"/><button ng-click="homeCtrl.searchNotes()"><i class="fa fa-search" aria-hidden="true"></i></button>
+	<br/><br/>
+</div>
+<script>
+(function(){
+	app.controller('HomeController', function(){
+		var ctrl = this;
+
+		ctrl.my_notes = "";
+		ctrl.all_notes = "";
+
+		ctrl.goToNotesPath = function(){
+			window.location.href = "<%= notes_path %>";
+		};
+
+		ctrl.searchMyNotes = function(){
+			window.location.href= "/search/<%= current_user.id %>?query=" + ctrl.my_notes;
+		};
+
+		ctrl.searchNotes = function(){
+			window.location.href= "/search?query=" + ctrl.all_notes;
+		};
+
+		return ctrl;
+	});
+})();
+</script>

@@ -1,0 +1,30 @@
+<div ng-controller="SearchController as searchCtrl">
+	<p><%= @notes.count %> results</p>
+
+	<div ng-repeat="result in searchCtrl.results">
+		<div>Title: {{result.title}}</div>
+		<div>Content: {{result.content}}</div>
+		<div>Privacy: {{result.privacy}}</div>
+		<div>Status: {{result.status}}</div>
+		<button ng-click="searchCtrl.goToNote(result)"><i class="fa fa-eye" aria-hidden="true"></i></button>
+	</div>
+	<br/><br/><br/>
+	<button ng-click="searchCtrl.goToHome()">Home</button>
+</div>
+<script>
+(function(){
+	app.controller('SearchController', function(){
+		var ctrl = this;
+
+		ctrl.results = <%== @notes.to_json() %>
+
+		ctrl.goToNote = function(note){
+			window.location.href = "<%= notes_path %>/" + note._id.$oid;
+		}
+		ctrl.goToHome = function(note){
+			window.location.href = "<%= root_path %>";
+		}
+		return ctrl;
+	});
+})();
+</script>

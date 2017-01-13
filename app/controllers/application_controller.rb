@@ -29,4 +29,7 @@ class ApplicationController < ActionController::Base
   def not_found
 		raise ActionController::RoutingError.new('Not Found')
 	end
+  def unauthorized_page
+    render file: "public/401.html", status: :unauthorized
+  end
 end

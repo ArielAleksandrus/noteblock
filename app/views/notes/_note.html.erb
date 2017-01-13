@@ -1,0 +1,90 @@
+<div ng-controller="EditingController as editCtrl">
+	<label for="title">Title:</label><br/>
+	<input id="title" type="text" ng-model="editCtrl.note.title" ng-change="editCtrl.saveDraft()"/>
+	<br/><br/>
+	<label for="content">Content:</label><br/>
+	<textarea id="content" rows="10" cols="40" ng-model="editCtrl.note.content" ng-change="editCtrl.saveDraft()"></textarea>
+	<br/><br/>
+	<div class="operations">
+		<button ng-click="editCtrl.togglePrivacy()">
+			<i class="fa" ng-class="{'fa-unlock': editCtrl.note.privacy == 'public', 'fa-lock': editCtrl.note.privacy == 'private'}" aria-hidden="true"></i>
+		</button>
+		<button ng-show="editCtrl.note.status != 'draft'" ng-click="editCtrl.toggleStatus()">
+				<i class="fa" ng-class="{'fa-times-circle': editCtrl.note.status == 'inactive', 'fa-check-circle': editCtrl.note.status == 'active'}" aria-hidden="true"></i>
+		</button>
+	</div>
+	<br/>
+	<span ng-show="editCtrl.error_syncing == false && editCtrl.synced == false">
+		Syncing... <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+	</span>
+	<span ng-show="editCtrl.error_syncing == false && editCtrl.synced == true">
+		<i class="fa fa-check-square" aria-hidden="true"></i> Synced!
+	</span>
+	<span ng-show="editCtrl.error_syncing == true">
+		<i class="fa fa-times-rectangle" aria-hidden="true"></i> Error while syncing!
+	</span>
+	<br/><br/>
+	<button ng-click="editCtrl.back()">Back</button>
+	<button ng-click="editCtrl.send(true)">Send</button>
+</div>
+
+<script>
+(function(){
+	app.controller('EditingController', ['$http', '$timeout', function($http, $timeout){
+		var ctrl = this;
+
+		/* data */
+		ctrl.note = <%== @note.to_json() %>;
+
+		/* events data */
+		ctrl.save_draft_timeout = null;
+		ctrl.error_syncing = false;
+		ctrl.synced = null;
+
+		/* Data operations */
+		ctrl.togglePrivacy = function(){
+			ctrl.saveDraft();
+			ctrl.note.privacy = ctrl.note.privacy == "public" ? "private" : "public";
+		};
+		ctrl.toggleStatus = function(){
+			ctrl.saveDraft();
+			ctrl.note.status = ctrl.note.status == "active" ? "inactive" : "active";
+		};
+
+		/* Navigation */
+		ctrl.back = function(){
+			window.location.href = "<%= notes_path %>";
+		}
+		/* events */
+		ctrl.saveDraft = function(){
+			ctrl.synced = false;
+			ctrl.error_syncing = false;
+			if(ctrl.save_draft_timeout == null)
+				ctrl.save_draft_timeout = $timeout(ctrl.sendDraft, 5000);
+		};
+		ctrl.sendDraft = function(){
+			ctrl.save_draft_timeout = null;
+			ctrl.send();
+		};
+		ctrl.send = function(clicked = false){
+			if(clicked && ctrl.note.status == "draft"){
+				ctrl.note.status = "active";
+			}
+
+			$timeout.cancel(ctrl.save_draft_timeout);
+			ctrl.save_draft_timeout = null;
+			$http.put('<%= notes_path %>/' + ctrl.note._id.$oid, {
+				csrf_token: getCSRFToken(),
+				note: ctrl.note
+			}).then(function success(response){
+				ctrl.synced = true;
+				ctrl.error_syncing = false;
+				ctrl.note = response.data;
+			}, function error(response){
+				ctrl.error_syncing = true;
+			});
+		};
+		return ctrl;
+	}]);
+})();
+</script>

@@ -1,0 +1,104 @@
+<h1>Your notes:</h1>
+
+<div ng-controller="NoteController as noteCtrl" class="notes">
+	<div class="note-list">
+		<div ng-repeat="note in noteCtrl.notes" class="saved-note">
+			<div class="title" ng-class="{'draft': note.status == 'draft'}">
+				{{note.title}} <span>{{note.visualizations}} views</span>
+			</div>
+			<br/>
+			<div class="content" ng-class="{'draft': note.status == 'draft'}">{{note.content.substring(0, 125)}}...</div>
+			<div class="operations">
+				<button ng-click="noteCtrl.seeNote(note)">
+					<i class="fa fa-eye" aria-hidden="true"></i>
+				</button>
+				<button ng-click="noteCtrl.editNote(note)">
+					<i class="fa fa-pencil" aria-hidden="true"></i>
+				</button>
+				<button ng-click="noteCtrl.togglePrivacy(note)">
+					<i class="fa" ng-class="{'fa-unlock': note.privacy == 'public', 'fa-lock': note.privacy == 'private'}" aria-hidden="true"></i>
+				</button>
+				<button ng-click="noteCtrl.toggleStatus(note)">
+					<i class="fa" ng-class="{'fa-times-circle': note.status == 'inactive', 'fa-check-circle': note.status == 'active', 'fa-cloud-upload': note.status == 'draft'}" aria-hidden="true"></i>
+				</button>
+			</div>
+		</div>
+		<br/>
+	</div>
+	<button class="add" ng-click="noteCtrl.addNote()">Add</button>
+	<button class="add" ng-click="noteCtrl.goToHome()">Home</button>
+	<button class="add" ng-click="noteCtrl.logout()">Logout</button>
+</div>
+
+<script>
+(function(){
+	app.controller('NoteController', ['$http', function($http){
+		var ctrl = this;
+
+		/* Data declarations */
+		ctrl.notes = <%== @notes.to_json %>;
+
+		ctrl.curNote = {
+			id: null,
+			title: null,
+			content: null,
+			status: null,
+			privacy: null
+		};
+
+		/* Navigation */
+		ctrl.goToHome = function(){
+			window.location.href = '<%= root_path %>';
+		};
+		ctrl.logout = function(){
+			window.location.href = '<%= destroy_user_session_path %>';
+		};
+
+		/* Data operations */
+		ctrl.addNote = function(){
+			window.location.href = '<%= new_note_path %>';
+		};
+		ctrl.seeNote = function(note){
+			window.location.href = '<%= notes_path %>/' + note._id.$oid;
+		};
+		ctrl.editNote = function(note) {
+			window.location.href = '<%= notes_path %>/' + note._id.$oid + '/edit';
+		};
+		ctrl.togglePrivacy = function(note){
+			let new_privacy = note.privacy == 'public' ? 'private' : 'public';
+
+			$http.patch('<%= notes_path %>/' + note._id.$oid, {
+				csrf_token: getCSRFToken(),
+				note: {
+					privacy: new_privacy
+				}
+			}).then(function success(response){
+				note.privacy = new_privacy;
+			}, function error(response){
+				alert("Error " + response.status);
+			});
+		};
+		ctrl.toggleStatus = function(note){
+			let new_status;
+			if(note.status == 'draft') { // save on cloud
+				new_status = 'active';
+			} else { // update status
+				new_status = note.status == 'active' ? 'inactive' : 'active';
+			}
+
+			$http.patch('<%= notes_path %>/' + note._id.$oid, {
+				csrf_token: getCSRFToken(),
+				note: {
+					status: new_status
+				}
+			}).then(function success(response){
+				note.status = new_status;
+			}, function error(response){
+				alert("Error " + response.status);
+			});
+		}
+	}]);
+
+
+})();
+</script>

@@ -8,7 +8,21 @@
   <%= yield :head %>
   <%= yield :stylesheets %>
 </head>
-<body data-no-turbolink>
+<body data-no-turbolink ng-app="note">
+
+<!-- Angular initialization -->
+<script>
+	var app;
+	(function() {
+		app = angular.module('note', []);
+	})();
+	function getCSRFToken(){
+		let metas = document.getElementsByTagName("meta");
+		for(let meta of metas)
+	    if(meta.getAttribute("name") == "csrf-token")
+	        return meta.getAttribute("content");
+	}
+</script>
 
 <!-- Yield content -->
 <%= yield %>

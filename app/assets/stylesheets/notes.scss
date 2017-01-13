@@ -1,0 +1,83 @@
+// Place all the styles related to the notes controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.notes {
+	.note-list {
+		position: relative;
+		.saved-note {
+			display: inline-block;
+			vertical-align: top;
+			padding: 1em 1.5em;
+			font-family: sans-serif;
+			width: 16em;
+			.title {
+				font-size: 125%;
+				span {
+					padding-left: 0.5em;
+					font-size: 60%;
+					font-style: italic;
+				}
+			}
+			.content {
+				font-size: 90%;
+				padding-bottom: 1em;
+				line-height: 2.5ex;
+				height: 10ex;
+			}
+			.draft {
+				color: #777;
+			}
+			.operations {
+				display: block;
+				button {
+					font-size: 90%;
+				}
+			}
+		}
+	}
+	.add {
+		margin-top: 2em;
+		padding: 1em 3em;
+	}
+	.fa-check-circle {
+		color: green;
+	}
+	.fa-times-circle {
+		color: red;
+	}
+	.fa-lock {
+		color: green;
+	}
+	.fa-unlock {
+		color: darkorange;
+	}
+	.fa-cloud-upload {
+		color: darkblue;
+	}
+
+	&.show{
+		font-family: sans-serif;
+		padding: 2em 0 0 4em;
+		.title {
+			font-size: 200%;
+			padding-bottom: 1em;
+
+			span {
+				font-size: 100%;
+				padding-left: 2em;
+				font-style: italic;
+				color: #777;
+			}
+		}
+		.content {
+			font-size: 110%;
+			padding-bottom: 1em;
+		}
+		.operations {
+			button {
+				font-size: 110%;
+			}
+		}
+	}
+}

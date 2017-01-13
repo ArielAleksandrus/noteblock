@@ -1,0 +1,12 @@
+<div class="notes show">
+	<div class="title"><%= @note.title %> <span><%= @note.visualizations %> views</span></div>
+	<div class="content"><%= simple_format(@note.content) %></div>
+	<div class="operations">
+		<button>
+			<i class="fa fa-<%= @note.privacy == "public" ? "unlock" : "lock" %>" aria-hidden="true"></i>
+		</button>
+		<button>
+			<i class="fa fa-<%= @note.status == "active" ? "check-circle" : (@note.status == "inactive" ? "times-circle" : "clock-o") %>" aria-hidden="true"></i>
+		</button>
+	</div>
+</div>

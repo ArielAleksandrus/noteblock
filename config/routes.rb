@@ -1,16 +1,18 @@
 Rails.application.routes.draw do
-  root to: 'home#index'
-  devise_for :users
+  get 'search/common'
 
-  resources :videos do
-    member do
-      get :update_poster
-      get :all_timelines
-      resources :timelines
-    end
+  get 'search/user_notes'
+
+  root to: 'home#index'
+
+  devise_for :users do
+    get 'sign_out' => 'devise/sessions#destroy'
   end
-  resources :tags, defaults: {format: :json}
-  resources :groups
+  
+  resources :notes
+
+  get '/search/:user_id' => 'search#user_notes'
+  get '/search' => 'search#common'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

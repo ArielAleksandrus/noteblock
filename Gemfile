@@ -10,23 +10,21 @@ gem 'bson_ext'
 # Use mongoid-slug for slug support in models.
 gem 'mongoid-slug'
 
+# Use Devise for user handling
+gem 'devise'
+
+# Use Angular for Front End Javascript framework
+gem 'angularjs-rails'
+
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
-# Use jquery as the JavaScript library
-gem 'jquery-rails'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.0'
-# Use 'angularjs-rails' and 'angular-ui-bootstrap-rails' for Angular support
-gem 'angularjs-rails'
 
-# Use elasticsearch-rails for full text search support
-gem 'elasticsearch-rails'
-# Use elasticsearch-model for lots of helper methods to ActiveRecord::Base
-gem 'elasticsearch-model'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
 
@@ -35,6 +33,10 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 # Use 'devise' for authentication
 gem 'devise'
+
+# Use elasticsearch for full-text search on Rails objects
+gem 'elasticsearch-ruby'
+gem 'mongoid-elasticsearch'
 
 
 # Use 'font-awesome-rails' for awesome fonts
